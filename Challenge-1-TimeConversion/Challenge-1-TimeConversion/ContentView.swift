@@ -1,21 +1,47 @@
-//
-//  ContentView.swift
-//  Challenge-1-TimeConversion
-//
-//  Created by Home on 01.06.2026.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var inputTime = 0.0
+    @State private var inputMeasurement = "h"
+    @State private var outputMeasurement = "min"
+    
+    let measurements = ["sec", "min", "h", "d"]
+    let factors: [Double] = [1, 60, 60*60, 60*60*24]
+    
+    var result: Double {
+        let inputIndex = measurements.firstIndex(of: inputMeasurement) ?? 0
+        let outputIndex = measurements.firstIndex(of: outputMeasurement) ?? 0
+        
+        return inputTime * factors[inputIndex] / factors[outputIndex]
+    }
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            Form {
+                Section("Convert from") {
+                    Picker("Measurements for input", selection: $inputMeasurement) {
+                        ForEach(measurements, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    TextField("Enter time", value: $inputTime, format: .number)
+                }
+                
+                
+                Section("Convert to") {
+                    Picker("Measurements for output", selection: $outputMeasurement) {
+                        ForEach(measurements, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    //Text(result, format: .number)
+                    Text(result.formatted())
+                }
+            }
+            .navigationTitle("Time Conversion")
         }
-        .padding()
     }
 }
 
