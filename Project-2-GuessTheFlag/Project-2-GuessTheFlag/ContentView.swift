@@ -1,17 +1,55 @@
 import SwiftUI
 
+
 struct ContentView: View {
+    @State private var showingAlert = false
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Image(systemName: "sun.snow.fill")
+                .font(.largeTitle)
         }
         .padding()
+        .alert("important message", isPresented: $showingAlert) {
+            Button("ok") {}
+        }
+    }
+    
+    func executeDelete() {
+        print("now deleting")
     }
 }
 
 #Preview {
     ContentView()
 }
+
+
+/*
+ ZStack {
+     LinearGradient(stops: [
+         .init(color: .pink, location: 0.45),
+         Gradient.Stop(color: .black, location: 0.55)
+     ], startPoint: .top, endPoint: .bottom)
+         .ignoresSafeArea()
+ 
+// RadialGradient(colors: [.pink, .black], center: .center, startRadius: 20, endRadius: 200)
+ 
+ // AngularGradient(colors: [.white, .indigo, .white, .indigo, .white, .indigo], center: .bottom)
+ 
+     Text("Hello, Kira!")
+         .foregroundStyle(.secondary)
+         .font(.title)
+         .bold()
+         .padding(50)
+         .background(.ultraThinMaterial)
+     
+ }
+ */
+
+/*
+ Text("Hello, Kira!")
+     .frame(maxWidth: .infinity, maxHeight: .infinity)
+     .foregroundStyle(.white)
+     .background(.indigo.gradient)
+ */
