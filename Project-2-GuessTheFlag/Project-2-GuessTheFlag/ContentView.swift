@@ -5,18 +5,15 @@ struct ContentView: View {
     @State private var showingAlert = false
     
     var body: some View {
-        VStack {
-            Image(systemName: "sun.snow.fill")
-                .font(.largeTitle)
+        Button("show alert") {
+            showingAlert = true
         }
-        .padding()
         .alert("important message", isPresented: $showingAlert) {
-            Button("ok") {}
+            Button("delete", role: .destructive) { }
+            Button("cancel", role: .cancel) {}
+        } message: {
+            Text("please read this")
         }
-    }
-    
-    func executeDelete() {
-        print("now deleting")
     }
 }
 
@@ -52,4 +49,21 @@ struct ContentView: View {
      .frame(maxWidth: .infinity, maxHeight: .infinity)
      .foregroundStyle(.white)
      .background(.indigo.gradient)
+ */
+
+
+/*
+ @State private var showingAlert = false
+ 
+ var body: some View {
+     Button("show alert") {
+         showingAlert = true
+     }
+     .alert("important message", isPresented: $showingAlert) {
+         Button("delete", role: .destructive) { }
+         Button("cancel", role: .cancel) {}
+     } message: {
+         Text("please read this")
+     }
+ }
  */
