@@ -10,6 +10,9 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    @State private var questionCount = 0
+    
     var body: some View {
         NavigationStack {
             List {
@@ -19,9 +22,12 @@ struct ContentView: View {
                 }
                 
                 Section {
+                    Text("Score: \(score)")
+                        .font(.headline)
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle")
+                            
                             Text(word)
                         }
                     }
@@ -35,13 +41,27 @@ struct ContentView: View {
             } message: {
                 Text(errorMessage)
             }
+            
+            Button("New Word") {
+                startGame()
+            }
+            .font(.title2.bold())
+            .padding()
         }
     }
     
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard answer.count > 0 else { return }
+        guard answer.count >= 3 else {
+            wordError(title: "Word is too short", message: "You know more interesting words")
+            return
+        }
+        
+        guard answer != rootWord else {
+            wordError(title: "Nice try!", message: "You can't use '\(rootWord)'")
+            return
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original!")
@@ -61,7 +81,9 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
+        
         newWord = ""
+        score += answer.count
     }
     
     func startGame() {
