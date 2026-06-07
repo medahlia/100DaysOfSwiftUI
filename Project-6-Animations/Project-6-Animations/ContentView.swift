@@ -1,14 +1,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var animationAmount = 0.0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Button("Tap Me") {
+            withAnimation(.spring(duration: 1, bounce: 0.5)) {
+                animationAmount += 360
+            }
         }
-        .padding()
+        .padding(50)
+        .background(.indigo)
+        .foregroundStyle(.white)
+        .clipShape(.circle)
+        .rotation3DEffect(.degrees(animationAmount), axis: (x: 0, y: 1, z: 0))
     }
 }
 
