@@ -3,10 +3,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: [
-        SortDescriptor(\Book.title),
-        SortDescriptor(\Book.author)
-    ]) var books: [Book]
+    @Query(sort: \Book.date, order: .reverse) var books: [Book]
     
     @State private var showingAddScreen = false
     
@@ -22,6 +19,7 @@ struct ContentView: View {
                             VStack(alignment: .leading) {
                                 Text(book.title)
                                     .font(.headline)
+                                    .foregroundStyle(book.rating == 5 ? .green : .primary)
                                 
                                 Text(book.author)
                                     .foregroundStyle(.secondary)

@@ -10,8 +10,17 @@ struct AddBookView: View {
     @State private var rating = 3
     @State private var genre = "Fantasy"
     @State private var review = ""
+    @State private var date = Date.now
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
+    
+    var hasValidInfo: Bool {
+        if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return false
+        }
+        
+        return true
+    }
     
     var body: some View {
         NavigationStack {
@@ -32,13 +41,18 @@ struct AddBookView: View {
                     RatingView(rating: $rating)
                 }
                 
+                Section("Finish Reading Date") {
+                    DatePicker("Enter a date", selection: $date, in: ...Date.now, displayedComponents: .date)
+                }
+                
                 Section {
                     Button("Save") {
-                        let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating)
+                        let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating, date: date)
                         modelContext.insert(newBook)
                         dismiss()
                     }
                 }
+                .disabled(hasValidInfo == false)
             }
             .navigationTitle("Add Book")
         }
