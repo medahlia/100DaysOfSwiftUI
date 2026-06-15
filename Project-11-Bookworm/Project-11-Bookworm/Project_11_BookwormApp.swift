@@ -1,4 +1,3 @@
-import SwiftData
 import SwiftUI
 
 @main
@@ -7,6 +6,5 @@ struct Project_11_BookwormApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Student.self)
     }
 }
