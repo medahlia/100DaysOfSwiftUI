@@ -12,6 +12,9 @@ extension ContentView {
         
         let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
         
+        var showingAlert = false
+        var alertMessage = ""
+        
         init() {
             do {
                 let data = try Data(contentsOf: savePath)
@@ -53,14 +56,18 @@ extension ContentView {
                 let reason = "Please authenticate yourself to unlock your places."
                 
                 context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
-                    if success {
-                        self.isUnlocked = true
-                    } else {
-                        // error
+                    Task { @MainActor in
+                        if success {
+                            self.isUnlocked = true
+                        } else {
+                            self.alertMessage = authenticationError?.localizedDescription ?? "Authentication failed."
+                            self.showingAlert = true
+                        }
                     }
                 }
             } else {
-                // no biometrics
+                alertMessage = error?.localizedDescription ?? "Biometric authentication is unavailable."
+                showingAlert = true
             }
         }
     }

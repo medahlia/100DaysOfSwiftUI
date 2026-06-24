@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @State private var viewModel = ViewModel()
     
+    @State private var mapHybridMode = true
+    
     var body: some View {
         if viewModel.isUnlocked {
             MapReader { proxy in
@@ -30,6 +32,12 @@ struct ContentView: View {
                         }
                     }
                 }
+                .mapStyle(mapHybridMode ? .hybrid : .standard)
+                .toolbar {
+                    Button(mapHybridMode ? "Standart" : "Hybrid") {
+                        mapHybridMode.toggle()
+                    }
+                }
                 .onTapGesture { position in
                     if let coordinate = proxy.convert(position, from: .local) {
                         viewModel.addLocation(at: coordinate)
@@ -47,6 +55,11 @@ struct ContentView: View {
                 .background(.blue)
                 .foregroundStyle(.white)
                 .clipShape(.capsule)
+                .alert("Authentication Error", isPresented: $viewModel.showingAlert) {
+                    Button("OK") { }
+                } message: {
+                    Text(viewModel.alertMessage)
+                }
         }
     }
 }
