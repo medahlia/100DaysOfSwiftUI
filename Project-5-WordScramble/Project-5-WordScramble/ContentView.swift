@@ -30,6 +30,9 @@ struct ContentView: View {
                             
                             Text(word)
                         }
+                        .accessibilityElement()
+                        .accessibilityLabel(word)
+                        .accessibilityHint("\(word.count) letters")
                     }
                 }
             }
