@@ -1,36 +1,22 @@
 import SwiftUI
 
+func withOptionalAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+    if UIAccessibility.isReduceMotionEnabled {
+        return try body()
+    } else {
+        return try withAnimation(animation, body)
+    }
+}
+
 struct ContentView: View {
-    @State private var offset = CGSize.zero
-    @State private var isDragging = false
+    @Environment(\.accessibilityReduceTransparency) var accessibilityReduceTransparency
     
     var body: some View {
-        let dragGesture = DragGesture()
-            .onChanged { value in
-                offset = value.translation
-            }
-            .onEnded { _ in
-                withAnimation {
-                    offset = .zero
-                    isDragging = false
-                }
-            }
-        
-        let pressGesture = LongPressGesture()
-            .onEnded { value in
-                withAnimation {
-                    isDragging = true
-                }
-            }
-        
-        let comdined = pressGesture.sequenced(before: dragGesture)
-        
-        Circle()
-            .fill(.purple)
-            .frame(width: 64, height: 64)
-            .scaleEffect(isDragging ? 1.5 : 1)
-            .offset(offset)
-            .gesture(comdined)
+        Text("Hello, world")
+            .padding()
+            .background(accessibilityReduceTransparency ? .black : .black.opacity(0.5))
+            .foregroundStyle(.white)
+            .clipShape(.capsule)
     }
 }
 
