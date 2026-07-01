@@ -1,38 +1,44 @@
 import SwiftUI
 
-extension VerticalAlignment {
-    struct MidAccountAndName: AlignmentID {
-        static func defaultValue(in context: ViewDimensions) -> CGFloat {
-            context[.top]
+struct OuterView: View {
+    var body: some View {
+        VStack {
+            Text("Top")
+            
+            InnerView()
+                .background(.green)
+            
+            Text("Bottom")
         }
     }
-    
-    static let midAccountAndName = VerticalAlignment(MidAccountAndName.self)
+}
+
+struct InnerView: View {
+    var body: some View {
+        HStack {
+            Text("Left")
+            
+            GeometryReader { proxy in
+                Text("Center")
+                    .background(.blue)
+                    .onTapGesture {
+                        print("Global center: \(proxy.frame(in: .global).minX) x \(proxy.frame(in: .global).midY)")
+                        print("Custom center: \(proxy.frame(in: .named("Custom")).minX) x \(proxy.frame(in: .named("Custom")).midY)")
+                        print("Local center: \(proxy.frame(in: .local).minX) x \(proxy.frame(in: .local).midY)")
+                    }
+            }
+            .background(.orange)
+            
+            Text("Right")
+        }
+    }
 }
 
 struct ContentView: View {
     var body: some View {
-        HStack(alignment: .midAccountAndName) {
-            VStack {
-                Text("@sheldon")
-                    .alignmentGuide(.midAccountAndName) { d in
-                        d[VerticalAlignment.center]
-                    }
-                
-                Image(.sheldonCooper)
-                    .resizable()
-                    .frame(width: 64, height: 64)
-            }
-            
-            VStack {
-                Text("Full name:")
-                Text("SHELDON COOPER")
-                    .alignmentGuide(.midAccountAndName, computeValue: { d in
-                        d[VerticalAlignment.center]
-                    })
-                    .font(.largeTitle)
-            }
-        }
+        OuterView()
+            .background(.red)
+            .coordinateSpace(name: "Custom")
     }
 }
 
