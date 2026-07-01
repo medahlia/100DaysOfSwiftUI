@@ -1,44 +1,28 @@
 import SwiftUI
 
-struct OuterView: View {
-    var body: some View {
-        VStack {
-            Text("Top")
-            
-            InnerView()
-                .background(.green)
-            
-            Text("Bottom")
-        }
-    }
-}
-
-struct InnerView: View {
-    var body: some View {
-        HStack {
-            Text("Left")
-            
-            GeometryReader { proxy in
-                Text("Center")
-                    .background(.blue)
-                    .onTapGesture {
-                        print("Global center: \(proxy.frame(in: .global).minX) x \(proxy.frame(in: .global).midY)")
-                        print("Custom center: \(proxy.frame(in: .named("Custom")).minX) x \(proxy.frame(in: .named("Custom")).midY)")
-                        print("Local center: \(proxy.frame(in: .local).minX) x \(proxy.frame(in: .local).midY)")
-                    }
-            }
-            .background(.orange)
-            
-            Text("Right")
-        }
-    }
-}
-
 struct ContentView: View {
+    
     var body: some View {
-        OuterView()
-            .background(.red)
-            .coordinateSpace(name: "Custom")
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 0) {
+                ForEach(1..<20) { number in
+                    Text("Number \(number)")
+                        .font(.largeTitle)
+                        .padding()
+                        .background(.red)
+                        .frame(width: 200, height: 200)
+                        .visualEffect({ content, proxy in
+                            content
+                                .rotation3DEffect(
+                                    .degrees(-proxy.frame(in: .global).minX / 8),
+                                    axis: (x: 0, y: 1, z: 0)
+                                )
+                        })
+                }
+            }
+            .scrollTargetLayout()
+        }
+        .scrollTargetBehavior(.viewAligned)
     }
 }
 
