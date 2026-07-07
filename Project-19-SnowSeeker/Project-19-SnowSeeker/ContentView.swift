@@ -2,13 +2,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationSplitView {
+            NavigationLink("Primary") {
+                Text("new view")
+            }
+        } detail: {
+            Text("Content")
+                .toolbar(.hidden, for: .navigationBar)
         }
-        .padding()
+        .navigationSplitViewStyle(.balanced)
     }
 }
 
