@@ -1,16 +1,20 @@
 import SwiftUI
 
+struct User: Identifiable {
+    var id = "Taylor Swift"
+}
+
 struct ContentView: View {
+    @State private var selectedUser: User? = nil
+    
     var body: some View {
-        NavigationSplitView {
-            NavigationLink("Primary") {
-                Text("new view")
-            }
-        } detail: {
-            Text("Content")
-                .toolbar(.hidden, for: .navigationBar)
+        Button("Tap Me") {
+            selectedUser = User()
         }
-        .navigationSplitViewStyle(.balanced)
+        .sheet(item: $selectedUser) { user in
+            Text(user.id)
+                .presentationDetents([.medium, .large])
+        }
     }
 }
 
