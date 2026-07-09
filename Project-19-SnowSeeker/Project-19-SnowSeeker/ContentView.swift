@@ -1,20 +1,30 @@
 import SwiftUI
 
-struct User: Identifiable {
-    var id = "Taylor Swift"
+@Observable
+class Player {
+    var name = "Anonymous"
+    var highScore = 0
+}
+
+struct HighScoreView: View {
+    @Environment(Player.self) var player
+    
+    var body: some View {
+        @Bindable var player = player
+        
+        Stepper("High score: \(player.highScore)", value: $player.highScore)
+    }
 }
 
 struct ContentView: View {
-    @State private var selectedUser: User? = nil
+    @State private var player = Player()
     
     var body: some View {
-        Button("Tap Me") {
-            selectedUser = User()
+        VStack {
+            Text("Welcome!")
+            HighScoreView()
         }
-        .sheet(item: $selectedUser) { user in
-            Text(user.id)
-                .presentationDetents([.medium, .large])
-        }
+        .environment(player)
     }
 }
 
